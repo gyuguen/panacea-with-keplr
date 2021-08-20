@@ -1,3 +1,4 @@
+/*
 import {assertIsBroadcastTxSuccess, SigningStargateClient} from "@cosmjs/stargate"
 
 export class KeplrUtils {
@@ -108,4 +109,4 @@ export class KeplrUtils {
         assertIsBroadcastTxSuccess(result);
     }
 
-}
+}*/
