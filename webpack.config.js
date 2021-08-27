@@ -9,7 +9,6 @@ module.exports = {
         my_nft: './src/my_nft.ts',
         nft_exchange: './src/nft_exchange.ts'
     },
-    // entry: './src/index.ts',
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -52,12 +51,12 @@ module.exports = {
         }),
     ],
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.scss'],
+        extensions: ['.tsx', '.ts', '.js'],
         fallback: {
             crypto: require.resolve("crypto-browserify"),
             stream: require.resolve("stream-browserify"),
             path: require.resolve("path-browserify"),
-            buffer: require.resolve("buffer")
+            buffer: require.resolve("buffer"),
         }
     },
     output: {

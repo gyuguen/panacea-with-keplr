@@ -1,11 +1,12 @@
 {
   "name": "panacea-with-keplr",
+  "type": "commonjs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open",
+    "start": "webpack && http-server ./dist",
     "build": "webpack"
   },
   "repository": {
@@ -23,6 +24,7 @@
     "@cosmjs/cosmwasm-stargate": "^0.25.6",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "http-server": "^13.0.1",
     "path-browserify": "^1.0.1",
     "stream-browserify": "^3.0.0"
   },
