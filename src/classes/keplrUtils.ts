@@ -1,30 +1,33 @@
-/*
-import {assertIsBroadcastTxSuccess, SigningStargateClient} from "@cosmjs/stargate"
-
 export class KeplrUtils {
     public chainId: string;
     public chainName: string;
     public rpcUri: string;
-    public restUri: string;
-    public keplr: any;
+    public restUri: string
 
     constructor(chainId: string, chainName: string, rpcUri: string, restUri: string) {
         this.chainId = chainId;
         this.chainName = chainName;
         this.rpcUri = rpcUri;
         this.restUri = restUri;
-        this.init();
     }
 
-    private async init() {
-        this.keplr = (window as any).keplr;
-        if (!(window as any).getOfflineSigner || !this.keplr) {
+    public static async build(chainId: string, chainName: string, rpcUri: string, restUri: string): Promise<KeplrUtils> {
+        let keplr = new KeplrUtils(chainId, chainName, rpcUri, restUri);
+        const status = await keplr.registerKeplr();
+        if (!status) {
+            return null;
+        }
+        return keplr;
+    }
+
+    private async registerKeplr(): Promise<boolean> {
+        if (!(window as any).getOfflineSigner || !this.getKeplrInWindow()) {
             alert("Please install keplr extension");
         } else {
-            if (this.keplr.experimentalSuggestChain) {
+            if (this.getKeplrInWindow().experimentalSuggestChain) {
                 try {
-                    let option = this.makeOption();
-                    await this.keplr.experimentalSuggestChain(option);
+                    await this.getKeplrInWindow().experimentalSuggestChain(this.makeOption());
+                    return true;
                 } catch {
                     alert("Failed to suggest the chain");
                 }
@@ -32,7 +35,19 @@ export class KeplrUtils {
                 alert("Please use the recent version of keplr extension");
             }
         }
-        return this;
+        return false;
+    }
+
+    public getKeplrInWindow(): any {
+        return (window as any).keplr;
+    }
+
+    public getOfflineSigner(): any {
+        return (window as any).getOfflineSigner(this.chainId);
+    }
+
+    public async getSignerAddress(): Promise<string> {
+        return (await this.getOfflineSigner().getAccounts())[0].address;
     }
 
     private makeOption() {
@@ -74,39 +89,9 @@ export class KeplrUtils {
                 low: 0.01,
                 average: 0.025,
                 high: 0.04
-            }
+            },
+            features: ["stargate", 'ibc-transfer', 'cosmwasm']
         };
     }
 
-    async getOfflineSigner() {
-        await this.keplr.enable(this.chainId);
-        return this.keplr.getOfflineSignerOnlyAmino(this.chainId);
-    }
-
-    async sendToken(recipient: string, _amount: string) {
-        let amount = parseFloat(_amount);
-        if (isNaN(amount)) {
-            alert("Invalid amount");
-            return false;
-        }
-
-        amount *= 1000000;
-        amount = Math.floor(amount);
-
-        const offlineSigner: any = this.getOfflineSigner();
-
-        const [firstAccount] = await offlineSigner.getAccounts();
-
-        const client = await SigningStargateClient.connectWithSigner(this.rpcUri, offlineSigner);
-
-        const coin = {
-            denom: "umed",
-            amount: amount.toString()
-        };
-
-        const result = await client.sendTokens(firstAccount.address, recipient, [coin], "Have fun with your star coins");
-
-        assertIsBroadcastTxSuccess(result);
-    }
-
-}*/
+}
