@@ -109,6 +109,29 @@
             </div>
             <button class="w-100 btn btn-primary btn-lg" type="submit" id="depositBtn">Deposit</button>
         </form>
+
+        <hr class="my-4">
+        <div class="py-5 text-left">
+            <h2>Refund</h2>
+        </div>
+        <form class="row g-3" id="refundForm">
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Contract</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="contract">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Refund</label>
+                <div class="col-sm-10">
+                    <div class="input-group col-md-6">
+                        <input type="number" class="form-control" name="amount" readonly>
+                        <span class="input-group-text">MED</span>
+                    </div>
+                </div>
+            </div>
+            <button class="w-100 btn btn-primary btn-lg" type="submit" id="refundBtn">Refund</button>
+        </form>
     </div>
 </div>
 </body>

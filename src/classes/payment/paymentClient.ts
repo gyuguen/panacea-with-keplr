@@ -1,6 +1,7 @@
 import {KeplrUtils} from "../keplrUtils";
 import {ExecuteResult, InstantiateResult, SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import {ContractCreate, ContractInfo, Execute, Query} from "./payment";
+import {Coin} from "@cosmjs/stargate";
 
 export class PaymentClient {
     public rpcUri: string;
@@ -47,5 +48,14 @@ export class PaymentClient {
         const funds = [{denom: "umed", amount: (parseFloat(amount) * 1000000).toString()}];
 
         return this.wasmClient.execute(payer, contract, Execute.depositToRecord(), "", funds);
+    }
+
+    public async getBalance(contract: string): Promise<Coin> {
+        return this.wasmClient.getBalance(contract, "umed");
+    }
+
+    public async refund(contract: string): Promise<ExecuteResult> {
+        const payer: string = await this.keplr.getSignerAddress();
+        return this.wasmClient.execute(payer, contract, Execute.refundToRecord(), "");
     }
 }

@@ -15,6 +15,12 @@ export class Execute {
         }
     }
 
+    public static refundToRecord(): Record<string, any> {
+        return {
+            refund: {}
+        }
+    }
+
 }
 
 export class Query {

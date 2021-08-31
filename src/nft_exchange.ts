@@ -82,6 +82,25 @@ document.getElementById("depositForm").onsubmit = async (e) => {
     } catch (err) {
         alert("Deposit failed.\r\n" + err);
     }
+}
 
+(document.querySelector("#refundForm input[name='contract']") as HTMLInputElement).onchange = async (e) => {
+    const contract = (e.target as HTMLInputElement).value;
+    const coin = await paymentClient.getBalance(contract);
+    const amount = parseFloat(coin.amount) / 1000000;
+    (document.querySelector("#refundForm input[name='amount']") as HTMLInputElement).value = amount.toString();
+}
 
+document.getElementById("refundForm").onsubmit = async (e) => {
+    e.preventDefault();
+
+    const form = new FormData(e.target as HTMLFormElement);
+    const contract = form.get("contract").toString();
+    try {
+        const result = await paymentClient.refund(contract);
+        alert("Refund success.\r\nTx: " + result.transactionHash);
+        await refreshContracts();
+    } catch (err) {
+        alert("Refund failed.\r\n" + err);
+    }
 }
